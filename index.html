@@ -104,6 +104,1042 @@
     const threatCanvas=document.querySelector('#threatCanvas'),threatCard=threatCanvas.parentElement,ctx=threatCanvas.getContext('2d');let canvasW=0,canvasH=0;const mesh=Array.from({length:42},()=>{let theta=Math.random()*Math.PI*2,phi=Math.acos(Math.random()*2-1),r=.72+Math.random()*.28;return{x:Math.sin(phi)*Math.cos(theta)*r,y:Math.cos(phi)*r,z:Math.sin(phi)*Math.sin(theta)*r};});
     function resizeMesh(){let rect=threatCard.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);if(rect.width===canvasW&&rect.height===canvasH)return;canvasW=rect.width;canvasH=rect.height;threatCanvas.width=canvasW*dpr;threatCanvas.height=canvasH*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
     function animateMesh(now){resizeMesh();ctx.clearRect(0,0,canvasW,canvasH);let cx=canvasW/2,cy=canvasH*.43,scale=Math.min(canvasW,canvasH)*.42,a=now*.00032,b=now*.00021,projected=mesh.map(p=>{let x=p.x*Math.cos(a)-p.z*Math.sin(a),z=p.x*Math.sin(a)+p.z*Math.cos(a),y=p.y*Math.cos(b)-z*Math.sin(b);z=p.y*Math.sin(b)+z*Math.cos(b);let depth=(z+2.4)/3.4;return{x:cx+x*scale*depth,y:cy+y*scale*depth,z,depth};});ctx.lineWidth=.6;for(let i=0;i<projected.length;i++)for(let j=i+1;j<projected.length;j++){let p=projected[i],q=projected[j],d=Math.hypot(p.x-q.x,p.y-q.y);if(d<78){ctx.strokeStyle=`rgba(37,220,238,${(.26-d/360)*Math.max(.15,(p.depth+q.depth)/2)})`;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.stroke();}}projected.sort((p,q)=>p.z-q.z).forEach(p=>{let r=1.2+p.depth*2.2;ctx.fillStyle=`rgba(93,239,248,${.28+p.depth*.6})`;ctx.beginPath();ctx.arc(p.x,p.y,r,0,Math.PI*2);ctx.fill();});ctx.strokeStyle='rgba(40,224,238,.23)';ctx.lineWidth=1;ctx.beginPath();ctx.ellipse(cx,cy,scale*.82,scale*.82,0,0,Math.PI*2);ctx.stroke();requestAnimationFrame(animateMesh);}requestAnimationFrame(animateMesh);
-  </script>
+  </script>```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MAL-DECT</title>
+</head>
+<body>
+
+<section class="maldect-hero">
+
+  <!-- 3D BACKGROUND -->
+  <div class="cyber-grid"></div>
+  <div class="scan-line"></div>
+
+  <!-- PARTICLES -->
+  <div class="particles">
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="hero-content">
+
+    <div class="status-pill">
+      <span class="status-dot"></span>
+      PRIVATE LOCAL PROTECTION
+    </div>
+
+    <h1>
+      Protect what matters.<br>
+      <span>Detect what doesn't.</span>
+    </h1>
+
+    <p>
+      MAL-DECT brings malware-risk scanning, scam detection,
+      privacy protection and cybersecurity learning into one
+      intelligent security workspace.
+    </p>
+
+    <!-- 3D BUTTONS -->
+    <div class="hero-buttons">
+
+      <button class="cyber-btn primary-btn" onclick="scrollToScanner()">
+        <span>⚡</span>
+        Launch Dashboard
+        <b>→</b>
+      </button>
+
+      <button class="cyber-btn secondary-btn" onclick="scrollToFeatures()">
+        <span>◈</span>
+        Explore Features
+        <b>↗</b>
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- 3D SHIELD -->
+  <div class="shield-wrapper">
+
+    <div class="energy-ring ring1"></div>
+    <div class="energy-ring ring2"></div>
+    <div class="energy-ring ring3"></div>
+
+    <div class="shield-3d">
+
+      <div class="shield-front">
+        🛡
+      </div>
+
+      <div class="shield-glow"></div>
+
+    </div>
+
+    <div class="orbit orbit1"></div>
+    <div class="orbit orbit2"></div>
+
+  </div>
+
+  <!-- FLOATING SECURITY CARDS -->
+
+  <div class="floating-card card1">
+    <span>🛡️</span>
+    <div>
+      <strong>DEVICE SAFE</strong>
+      <small>Protection active</small>
+    </div>
+  </div>
+
+  <div class="floating-card card2">
+    <span>⚡</span>
+    <div>
+      <strong>THREAT SCAN</strong>
+      <small>AI analysis ready</small>
+    </div>
+  </div>
+
+  <div class="floating-card card3">
+    <span>🔐</span>
+    <div>
+      <strong>PRIVACY</strong>
+      <small>Protected locally</small>
+    </div>
+  </div>
+
+</section>
+
+
+<style>
+
+/* ================================
+   HERO
+================================ */
+
+.maldect-hero {
+  min-height: 720px;
+  position: relative;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+
+  padding: 80px 8%;
+
+  background:
+    radial-gradient(
+      circle at 70% 45%,
+      rgba(0, 255, 200, .13),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 20% 80%,
+      rgba(70, 90, 255, .12),
+      transparent 35%
+    ),
+    #030609;
+
+  color: white;
+
+  perspective: 1200px;
+}
+
+
+/* ================================
+   3D GRID
+================================ */
+
+.cyber-grid {
+
+  position: absolute;
+
+  width: 160%;
+  height: 100%;
+
+  left: -30%;
+  bottom: -45%;
+
+  background-image:
+    linear-gradient(
+      rgba(0,255,200,.12) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(0,255,200,.12) 1px,
+      transparent 1px
+    );
+
+  background-size: 70px 70px;
+
+  transform:
+    perspective(500px)
+    rotateX(65deg);
+
+  animation: gridMove 8s linear infinite;
+
+  opacity: .45;
+}
+
+
+@keyframes gridMove {
+
+  from {
+    transform:
+      perspective(500px)
+      rotateX(65deg)
+      translateY(0);
+  }
+
+  to {
+    transform:
+      perspective(500px)
+      rotateX(65deg)
+      translateY(70px);
+  }
+
+}
+
+
+/* ================================
+   SCAN LINE
+================================ */
+
+.scan-line {
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+
+  height: 2px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      #00ffc8,
+      transparent
+    );
+
+  box-shadow:
+    0 0 20px #00ffc8;
+
+  animation: scan 5s linear infinite;
+
+  opacity: .5;
+}
+
+
+@keyframes scan {
+
+  0% {
+    top: -10%;
+  }
+
+  100% {
+    top: 110%;
+  }
+
+}
+
+
+/* ================================
+   PARTICLES
+================================ */
+
+.particles span {
+
+  position: absolute;
+
+  width: 3px;
+  height: 3px;
+
+  border-radius: 50%;
+
+  background: #00ffc8;
+
+  box-shadow:
+    0 0 12px #00ffc8;
+
+  animation: floatParticle 8s infinite ease-in-out;
+
+}
+
+
+.particles span:nth-child(1) { left: 5%; top: 20%; }
+.particles span:nth-child(2) { left: 12%; top: 70%; }
+.particles span:nth-child(3) { left: 22%; top: 35%; }
+.particles span:nth-child(4) { left: 30%; top: 80%; }
+.particles span:nth-child(5) { left: 42%; top: 15%; }
+.particles span:nth-child(6) { left: 50%; top: 60%; }
+.particles span:nth-child(7) { left: 60%; top: 25%; }
+.particles span:nth-child(8) { left: 70%; top: 75%; }
+.particles span:nth-child(9) { left: 80%; top: 20%; }
+.particles span:nth-child(10) { left: 90%; top: 60%; }
+.particles span:nth-child(11) { left: 15%; top: 50%; }
+.particles span:nth-child(12) { left: 35%; top: 25%; }
+.particles span:nth-child(13) { left: 55%; top: 85%; }
+.particles span:nth-child(14) { left: 65%; top: 45%; }
+.particles span:nth-child(15) { left: 75%; top: 15%; }
+.particles span:nth-child(16) { left: 85%; top: 80%; }
+.particles span:nth-child(17) { left: 45%; top: 45%; }
+.particles span:nth-child(18) { left: 25%; top: 90%; }
+.particles span:nth-child(19) { left: 95%; top: 35%; }
+.particles span:nth-child(20) { left: 10%; top: 10%; }
+
+
+@keyframes floatParticle {
+
+  0%,100% {
+    transform: translateY(0);
+    opacity: .3;
+  }
+
+  50% {
+    transform: translateY(-40px);
+    opacity: 1;
+  }
+
+}
+
+
+/* ================================
+   CONTENT
+================================ */
+
+.hero-content {
+
+  position: relative;
+
+  z-index: 5;
+
+  width: 55%;
+
+  animation: heroIn 1s ease forwards;
+
+}
+
+
+@keyframes heroIn {
+
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+}
+
+
+/* STATUS */
+
+.status-pill {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 9px 15px;
+
+  border: 1px solid rgba(0,255,200,.35);
+
+  border-radius: 50px;
+
+  background: rgba(0,255,200,.06);
+
+  backdrop-filter: blur(10px);
+
+  font-size: 11px;
+
+  letter-spacing: 2px;
+
+  color: #00ffc8;
+
+}
+
+
+.status-dot {
+
+  width: 7px;
+  height: 7px;
+
+  background: #00ffc8;
+
+  border-radius: 50%;
+
+  box-shadow: 0 0 12px #00ffc8;
+
+  animation: pulse 1.5s infinite;
+
+}
+
+
+@keyframes pulse {
+
+  50% {
+    transform: scale(1.7);
+    opacity: .5;
+  }
+
+}
+
+
+/* HEADING */
+
+.hero-content h1 {
+
+  font-size: clamp(45px, 6vw, 85px);
+
+  line-height: .98;
+
+  margin: 25px 0;
+
+  font-weight: 800;
+
+  letter-spacing: -4px;
+
+}
+
+
+.hero-content h1 span {
+
+  color: #00ffc8;
+
+  text-shadow:
+    0 0 20px rgba(0,255,200,.4);
+
+}
+
+
+/* DESCRIPTION */
+
+.hero-content p {
+
+  max-width: 650px;
+
+  color: #9ba9b5;
+
+  font-size: 17px;
+
+  line-height: 1.7;
+
+}
+
+
+/* ================================
+   3D BUTTONS
+================================ */
+
+.hero-buttons {
+
+  display: flex;
+
+  gap: 18px;
+
+  margin-top: 35px;
+
+}
+
+
+.cyber-btn {
+
+  position: relative;
+
+  padding: 17px 24px;
+
+  border-radius: 14px;
+
+  font-weight: 700;
+
+  font-size: 14px;
+
+  letter-spacing: .5px;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  transition:
+    transform .2s,
+    box-shadow .2s;
+
+}
+
+
+/* PRIMARY */
+
+.primary-btn {
+
+  border: 1px solid #00ffc8;
+
+  color: #00110d;
+
+  background: #00ffc8;
+
+  box-shadow:
+    0 7px 0 #008f76,
+    0 15px 35px rgba(0,255,200,.25);
+
+}
+
+
+.primary-btn:hover {
+
+  transform:
+    translateY(-7px)
+    rotateX(8deg);
+
+  box-shadow:
+    0 14px 0 #008f76,
+    0 25px 50px rgba(0,255,200,.4);
+
+}
+
+
+.primary-btn:active {
+
+  transform: translateY(5px);
+
+  box-shadow:
+    0 2px 0 #008f76;
+
+}
+
+
+/* SECONDARY */
+
+.secondary-btn {
+
+  color: white;
+
+  background: rgba(255,255,255,.04);
+
+  border: 1px solid rgba(255,255,255,.15);
+
+  box-shadow:
+    0 7px 0 rgba(255,255,255,.04),
+    0 15px 30px rgba(0,0,0,.3);
+
+  backdrop-filter: blur(12px);
+
+}
+
+
+.secondary-btn:hover {
+
+  transform:
+    translateY(-7px)
+    rotateX(8deg);
+
+  border-color: #00ffc8;
+
+  box-shadow:
+    0 14px 0 rgba(0,255,200,.15),
+    0 20px 40px rgba(0,255,200,.15);
+
+}
+
+
+.secondary-btn:active {
+
+  transform: translateY(5px);
+
+}
+
+
+/* ================================
+   3D SHIELD
+================================ */
+
+.shield-wrapper {
+
+  position: absolute;
+
+  right: 10%;
+
+  top: 50%;
+
+  width: 350px;
+  height: 350px;
+
+  transform:
+    translateY(-50%);
+
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+}
+
+
+.shield-3d {
+
+  position: relative;
+
+  width: 190px;
+  height: 220px;
+
+  transform:
+    rotateY(-15deg)
+    rotateX(8deg);
+
+  animation: shieldFloat 4s ease-in-out infinite;
+
+}
+
+
+.shield-front {
+
+  position: absolute;
+
+  inset: 0;
+
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  font-size: 110px;
+
+  filter:
+    drop-shadow(0 0 15px #00ffc8)
+    drop-shadow(0 0 40px rgba(0,255,200,.5));
+
+  transform:
+    translateZ(30px);
+
+}
+
+
+.shield-glow {
+
+  position: absolute;
+
+  inset: 20px;
+
+  background: #00ffc8;
+
+  filter: blur(80px);
+
+  opacity: .18;
+
+}
+
+
+@keyframes shieldFloat {
+
+  0%,100% {
+
+    transform:
+      rotateY(-15deg)
+      rotateX(8deg)
+      translateY(0);
+
+  }
+
+  50% {
+
+    transform:
+      rotateY(15deg)
+      rotateX(-5deg)
+      translateY(-25px);
+
+  }
+
+}
+
+
+/* ================================
+   ENERGY RINGS
+================================ */
+
+.energy-ring {
+
+  position: absolute;
+
+  border: 1px solid rgba(0,255,200,.35);
+
+  border-radius: 50%;
+
+}
+
+
+.ring1 {
+
+  width: 260px;
+  height: 260px;
+
+  animation: rotateRing 8s linear infinite;
+
+}
+
+
+.ring2 {
+
+  width: 320px;
+  height: 180px;
+
+  transform: rotateX(65deg);
+
+  animation: rotateRing 6s linear infinite reverse;
+
+}
+
+
+.ring3 {
+
+  width: 220px;
+  height: 340px;
+
+  transform: rotateY(65deg);
+
+  animation: rotateRing 10s linear infinite;
+
+}
+
+
+@keyframes rotateRing {
+
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+
+}
+
+
+/* ================================
+   FLOATING CARDS
+================================ */
+
+.floating-card {
+
+  position: absolute;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 12px 16px;
+
+  background:
+    rgba(5,12,18,.7);
+
+  border:
+    1px solid rgba(0,255,200,.2);
+
+  border-radius: 12px;
+
+  backdrop-filter: blur(15px);
+
+  box-shadow:
+    0 10px 35px rgba(0,0,0,.4);
+
+  font-size: 11px;
+
+  z-index: 6;
+
+  animation: cardFloat 4s ease-in-out infinite;
+
+}
+
+
+.floating-card span {
+
+  font-size: 22px;
+
+}
+
+
+.floating-card strong {
+
+  display: block;
+
+  color: #00ffc8;
+
+  letter-spacing: 1px;
+
+}
+
+
+.floating-card small {
+
+  color: #78848d;
+
+}
+
+
+.card1 {
+
+  right: 2%;
+  top: 25%;
+
+}
+
+
+.card2 {
+
+  right: 4%;
+  bottom: 22%;
+
+  animation-delay: 1s;
+
+}
+
+
+.card3 {
+
+  left: 50%;
+  bottom: 10%;
+
+  animation-delay: 2s;
+
+}
+
+
+@keyframes cardFloat {
+
+  0%,100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-15px);
+  }
+
+}
+
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media(max-width:900px) {
+
+  .hero-content {
+
+    width: 100%;
+
+  }
+
+  .shield-wrapper {
+
+    opacity: .25;
+
+    right: -100px;
+
+  }
+
+}
+
+
+@media(max-width:600px) {
+
+  .maldect-hero {
+
+    padding: 70px 25px;
+
+  }
+
+  .hero-content h1 {
+
+    font-size: 48px;
+
+  }
+
+  .hero-buttons {
+
+    flex-direction: column;
+
+  }
+
+  .cyber-btn {
+
+    justify-content: center;
+
+  }
+
+  .floating-card {
+
+    display: none;
+
+  }
+
+}
+
+
+/* ================================
+   ACCESSIBILITY
+================================ */
+
+@media(prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+
+  }
+
+}
+
+</style>
+
+
+<script>
+
+/* ================================
+   BUTTON NAVIGATION
+================================ */
+
+function scrollToScanner() {
+
+  const scanner =
+    document.querySelector(
+      '#scanner, .scanner, [data-section="scanner"]'
+    );
+
+  if(scanner) {
+
+    scanner.scrollIntoView({
+      behavior: "smooth"
+    });
+
+  } else {
+
+    window.scrollTo({
+      top: window.innerHeight,
+      behavior: "smooth"
+    });
+
+  }
+
+}
+
+
+function scrollToFeatures() {
+
+  const features =
+    document.querySelector(
+      '#features, .features, [data-section="features"]'
+    );
+
+  if(features) {
+
+    features.scrollIntoView({
+      behavior: "smooth"
+    });
+
+  } else {
+
+    window.scrollTo({
+      top: window.innerHeight * 1.2,
+      behavior: "smooth"
+    });
+
+  }
+
+}
+
+
+/* ================================
+   MOUSE 3D PARALLAX
+================================ */
+
+const hero =
+  document.querySelector(".maldect-hero");
+
+const shield =
+  document.querySelector(".shield-wrapper");
+
+const cards =
+  document.querySelectorAll(".floating-card");
+
+if(hero) {
+
+  hero.addEventListener("mousemove", (e) => {
+
+    const x =
+      (e.clientX / window.innerWidth - .5);
+
+    const y =
+      (e.clientY / window.innerHeight - .5);
+
+    if(shield) {
+      shield.style.transform =
+        `translateY(-50%)
+         translateX(${x * 20}px)
+         rotateY(${x * 8}deg)
+         rotateX(${y * -8}deg)`;
+    }
+
+    cards.forEach((card, index) => {
+
+      const amount =
+        (index + 1) * 8;
+
+      card.style.animation = "none";
+      card.style.transform =
+        `translate(${x * amount}px,
+                   ${y * amount}px)`;
+
+    });
+
+  });
+
+
+  /* RESET */
+
+  hero.addEventListener("mouseleave", () => {
+
+    if(shield) {
+      shield.style.transform =
+        "translateY(-50%)";
+    }
+
+    cards.forEach(card => {
+
+      card.style.animation = "";
+      card.style.transform = "";
+
+    });
+
+  });
+
+}
+
+</script>
+
+</body>
+</html>
+```
+
 </body>
 </html>
