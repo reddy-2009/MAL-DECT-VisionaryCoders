@@ -105,5 +105,1140 @@
     function resizeMesh(){let rect=threatCard.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);if(rect.width===canvasW&&rect.height===canvasH)return;canvasW=rect.width;canvasH=rect.height;threatCanvas.width=canvasW*dpr;threatCanvas.height=canvasH*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
     function animateMesh(now){resizeMesh();ctx.clearRect(0,0,canvasW,canvasH);let cx=canvasW/2,cy=canvasH*.43,scale=Math.min(canvasW,canvasH)*.42,a=now*.00032,b=now*.00021,projected=mesh.map(p=>{let x=p.x*Math.cos(a)-p.z*Math.sin(a),z=p.x*Math.sin(a)+p.z*Math.cos(a),y=p.y*Math.cos(b)-z*Math.sin(b);z=p.y*Math.sin(b)+z*Math.cos(b);let depth=(z+2.4)/3.4;return{x:cx+x*scale*depth,y:cy+y*scale*depth,z,depth};});ctx.lineWidth=.6;for(let i=0;i<projected.length;i++)for(let j=i+1;j<projected.length;j++){let p=projected[i],q=projected[j],d=Math.hypot(p.x-q.x,p.y-q.y);if(d<78){ctx.strokeStyle=`rgba(37,220,238,${(.26-d/360)*Math.max(.15,(p.depth+q.depth)/2)})`;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.stroke();}}projected.sort((p,q)=>p.z-q.z).forEach(p=>{let r=1.2+p.depth*2.2;ctx.fillStyle=`rgba(93,239,248,${.28+p.depth*.6})`;ctx.beginPath();ctx.arc(p.x,p.y,r,0,Math.PI*2);ctx.fill();});ctx.strokeStyle='rgba(40,224,238,.23)';ctx.lineWidth=1;ctx.beginPath();ctx.ellipse(cx,cy,scale*.82,scale*.82,0,0,Math.PI*2);ctx.stroke();requestAnimationFrame(animateMesh);}requestAnimationFrame(animateMesh);
   </script>
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MAL-DECT | Windows Security</title>
+
+<style>
+
+/* =========================
+   RESET
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #030712;
+    color: white;
+    overflow-x: hidden;
+}
+
+/* =========================
+   3D BACKGROUND
+========================= */
+
+.background {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    z-index: -5;
+    background:
+        radial-gradient(circle at 20% 20%, #123b63 0%, transparent 35%),
+        radial-gradient(circle at 80% 70%, #3a145f 0%, transparent 35%),
+        #030712;
+}
+
+/* Grid floor */
+
+.grid {
+    position: absolute;
+    width: 200%;
+    height: 100%;
+    left: -50%;
+    bottom: -45%;
+    
+    background-image:
+        linear-gradient(rgba(0, 200, 255, .15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 200, 255, .15) 1px, transparent 1px);
+
+    background-size: 60px 60px;
+
+    transform:
+        perspective(500px)
+        rotateX(65deg);
+
+    animation: gridMove 8s linear infinite;
+}
+
+@keyframes gridMove {
+
+    from {
+        transform:
+            perspective(500px)
+            rotateX(65deg)
+            translateY(0);
+    }
+
+    to {
+        transform:
+            perspective(500px)
+            rotateX(65deg)
+            translateY(60px);
+    }
+}
+
+/* =========================
+   FLOATING 3D CUBES
+========================= */
+
+.cube {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+
+    border: 2px solid rgba(0, 200, 255, .6);
+
+    background: rgba(0, 180, 255, .05);
+
+    box-shadow:
+        0 0 30px rgba(0, 200, 255, .4),
+        inset 0 0 25px rgba(0, 200, 255, .1);
+
+    transform-style: preserve-3d;
+
+    animation: cubeFloat 8s ease-in-out infinite;
+}
+
+.cube:nth-child(2) {
+    width: 120px;
+    height: 120px;
+    right: 10%;
+    top: 20%;
+    animation-delay: -3s;
+}
+
+.cube:nth-child(3) {
+    width: 60px;
+    height: 60px;
+    left: 12%;
+    bottom: 20%;
+    animation-delay: -5s;
+}
+
+@keyframes cubeFloat {
+
+    0%,100% {
+        transform:
+            rotateX(0deg)
+            rotateY(0deg)
+            translateY(0);
+    }
+
+    50% {
+        transform:
+            rotateX(180deg)
+            rotateY(180deg)
+            translateY(-80px);
+    }
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+nav {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+
+    padding: 20px 7%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: rgba(3, 7, 18, .55);
+
+    backdrop-filter: blur(15px);
+
+    border-bottom: 1px solid rgba(255,255,255,.08);
+
+    z-index: 100;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 800;
+
+    color: #00d9ff;
+
+    text-shadow:
+        0 0 10px #00d9ff,
+        0 0 30px #00d9ff;
+}
+
+nav ul {
+    display: flex;
+    gap: 30px;
+    list-style: none;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+
+    transition: .3s;
+}
+
+nav a:hover {
+    color: #00d9ff;
+    text-shadow: 0 0 15px #00d9ff;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero {
+
+    min-height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    padding: 120px 20px 80px;
+
+    position: relative;
+
+    perspective: 1000px;
+}
+
+.hero-content {
+
+    max-width: 850px;
+
+    transform-style: preserve-3d;
+
+    animation: heroFloat 5s ease-in-out infinite;
+}
+
+@keyframes heroFloat {
+
+    0%,100% {
+        transform: translateY(0) rotateX(0deg);
+    }
+
+    50% {
+        transform: translateY(-12px) rotateX(2deg);
+    }
+}
+
+.badge {
+
+    display: inline-block;
+
+    padding: 10px 20px;
+
+    border: 1px solid #00d9ff;
+
+    border-radius: 50px;
+
+    color: #00d9ff;
+
+    background: rgba(0,217,255,.08);
+
+    box-shadow:
+        0 0 20px rgba(0,217,255,.25);
+
+    margin-bottom: 25px;
+}
+
+h1 {
+
+    font-size: clamp(50px, 9vw, 100px);
+
+    line-height: 1;
+
+    font-weight: 900;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ffffff,
+            #00d9ff,
+            #8b5cf6,
+            #ffffff
+        );
+
+    background-size: 300%;
+
+    -webkit-background-clip: text;
+
+    color: transparent;
+
+    animation: gradientText 5s linear infinite;
+
+    text-shadow:
+        0 0 50px rgba(0,217,255,.25);
+}
+
+@keyframes gradientText {
+
+    0% {
+        background-position: 0%;
+    }
+
+    100% {
+        background-position: 300%;
+    }
+}
+
+.hero p {
+
+    max-width: 700px;
+
+    margin: 25px auto;
+
+    color: #aab6c7;
+
+    font-size: 19px;
+
+    line-height: 1.7;
+}
+
+/* =========================
+   3D BUTTONS
+========================= */
+
+.buttons {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 20px;
+
+    flex-wrap: wrap;
+
+    margin-top: 35px;
+}
+
+.btn {
+
+    position: relative;
+
+    padding: 16px 32px;
+
+    border-radius: 12px;
+
+    text-decoration: none;
+
+    font-weight: bold;
+
+    font-size: 16px;
+
+    display: inline-block;
+
+    transform-style: preserve-3d;
+
+    transition:
+        transform .2s,
+        box-shadow .2s;
+
+    cursor: pointer;
+}
+
+.btn-primary {
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #00a6ff,
+            #6d28d9
+        );
+
+    box-shadow:
+        0 8px 0 #064b75,
+        0 15px 35px rgba(0,160,255,.35);
+
+}
+
+.btn-primary:hover {
+
+    transform:
+        translateY(-8px)
+        rotateX(12deg)
+        rotateY(-8deg);
+
+    box-shadow:
+        0 16px 0 #064b75,
+        0 25px 50px rgba(0,200,255,.5);
+}
+
+.btn-primary:active {
+
+    transform: translateY(5px);
+
+    box-shadow:
+        0 3px 0 #064b75;
+}
+
+.btn-outline {
+
+    color: #00d9ff;
+
+    border: 1px solid #00d9ff;
+
+    background: rgba(0,217,255,.05);
+
+    box-shadow:
+        0 0 20px rgba(0,217,255,.1);
+}
+
+.btn-outline:hover {
+
+    color: white;
+
+    background: #00a6ff;
+
+    transform:
+        translateY(-8px)
+        rotateX(10deg)
+        rotateY(8deg);
+
+    box-shadow:
+        0 15px 40px rgba(0,217,255,.45);
+}
+
+/* =========================
+   SECURITY ORB
+========================= */
+
+.security-orb {
+
+    position: absolute;
+
+    right: 8%;
+
+    top: 35%;
+
+    width: 160px;
+
+    height: 160px;
+
+    border-radius: 50%;
+
+    border: 2px solid rgba(0,217,255,.5);
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(0,217,255,.3),
+            rgba(0,0,0,.1)
+        );
+
+    box-shadow:
+        0 0 40px rgba(0,217,255,.5),
+        inset 0 0 40px rgba(0,217,255,.3);
+
+    animation:
+        orbRotate 8s linear infinite,
+        orbPulse 3s ease-in-out infinite;
+
+    transform-style: preserve-3d;
+}
+
+.security-orb::before {
+
+    content: "🛡️";
+
+    position: absolute;
+
+    inset: 0;
+
+    display: grid;
+
+    place-items: center;
+
+    font-size: 65px;
+
+    filter:
+        drop-shadow(0 0 15px #00d9ff);
+}
+
+@keyframes orbRotate {
+
+    from {
+        transform:
+            rotateX(0)
+            rotateY(0);
+    }
+
+    to {
+        transform:
+            rotateX(360deg)
+            rotateY(360deg);
+    }
+}
+
+@keyframes orbPulse {
+
+    50% {
+        box-shadow:
+            0 0 80px rgba(0,217,255,.8),
+            inset 0 0 60px rgba(0,217,255,.4);
+    }
+}
+
+/* =========================
+   FEATURES
+========================= */
+
+.features {
+
+    padding: 100px 7%;
+
+    position: relative;
+}
+
+.section-title {
+
+    text-align: center;
+
+    margin-bottom: 60px;
+}
+
+.section-title h2 {
+
+    font-size: 45px;
+
+    margin-bottom: 15px;
+}
+
+.section-title p {
+
+    color: #8995a7;
+}
+
+/* =========================
+   3D CARDS
+========================= */
+
+.cards {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(230px,1fr)
+        );
+
+    gap: 30px;
+
+    max-width: 1100px;
+
+    margin: auto;
+}
+
+.card {
+
+    position: relative;
+
+    padding: 35px;
+
+    min-height: 250px;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.08),
+            rgba(255,255,255,.02)
+        );
+
+    border:
+        1px solid rgba(255,255,255,.1);
+
+    backdrop-filter: blur(15px);
+
+    transform-style: preserve-3d;
+
+    transition:
+        transform .5s,
+        box-shadow .5s;
+
+    overflow: hidden;
+}
+
+.card::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 150px;
+
+    height: 150px;
+
+    background: #00d9ff;
+
+    filter: blur(80px);
+
+    opacity: .12;
+
+    top: -70px;
+
+    right: -70px;
+}
+
+.card:hover {
+
+    transform:
+        perspective(800px)
+        rotateX(8deg)
+        rotateY(-8deg)
+        translateY(-15px)
+        scale(1.02);
+
+    box-shadow:
+        0 25px 60px rgba(0,0,0,.4),
+        0 0 30px rgba(0,217,255,.15);
+}
+
+.icon {
+
+    width: 65px;
+
+    height: 65px;
+
+    border-radius: 16px;
+
+    display: grid;
+
+    place-items: center;
+
+    font-size: 30px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #00a6ff,
+            #6d28d9
+        );
+
+    box-shadow:
+        0 10px 25px rgba(0,160,255,.3);
+
+    transform:
+        translateZ(40px);
+
+    margin-bottom: 25px;
+}
+
+.card h3 {
+
+    font-size: 23px;
+
+    margin-bottom: 12px;
+
+    transform:
+        translateZ(25px);
+}
+
+.card p {
+
+    color: #929daf;
+
+    line-height: 1.6;
+
+    transform:
+        translateZ(20px);
+}
+
+/* =========================
+   CTA
+========================= */
+
+.cta {
+
+    margin: 100px auto;
+
+    max-width: 1000px;
+
+    padding: 70px 30px;
+
+    text-align: center;
+
+    border-radius: 30px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0,217,255,.1),
+            rgba(124,58,237,.1)
+        );
+
+    border:
+        1px solid rgba(0,217,255,.2);
+
+    box-shadow:
+        0 0 80px rgba(0,217,255,.08);
+
+    transform-style: preserve-3d;
+}
+
+.cta h2 {
+
+    font-size: 40px;
+
+    margin-bottom: 20px;
+}
+
+.cta p {
+
+    color: #9ba7b8;
+
+    margin-bottom: 30px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+
+    padding: 30px;
+
+    text-align: center;
+
+    color: #687386;
+
+    border-top:
+        1px solid rgba(255,255,255,.08);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:700px) {
+
+    nav ul {
+        display: none;
+    }
+
+    .security-orb {
+        opacity: .25;
+        right: -50px;
+    }
+
+    h1 {
+        font-size: 55px;
+    }
+
+    .hero p {
+        font-size: 16px;
+    }
+
+    .section-title h2 {
+        font-size: 35px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     3D BACKGROUND
+========================= -->
+
+<div class="background">
+
+    <div class="grid"></div>
+
+    <div class="cube"
+         style="left:8%;top:25%;">
+    </div>
+
+    <div class="cube"></div>
+
+    <div class="cube"></div>
+
+</div>
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<nav>
+
+    <div class="logo">
+        MAL-DECT
+    </div>
+
+    <ul>
+
+        <li>
+            <a href="#home">Home</a>
+        </li>
+
+        <li>
+            <a href="#features">Features</a>
+        </li>
+
+        <li>
+            <a href="#about">About</a>
+        </li>
+
+        <li>
+            <a href="#contact">Contact</a>
+        </li>
+
+    </ul>
+
+</nav>
+
+
+<!-- =========================
+     HERO
+========================= -->
+
+<section class="hero" id="home">
+
+    <div class="hero-content">
+
+        <div class="badge">
+            🛡️ Next Generation Windows Security
+        </div>
+
+        <h1>
+            MAL-DECT
+        </h1>
+
+        <p>
+            Intelligent malware detection and Windows
+            theft protection designed to keep your
+            digital environment safer.
+        </p>
+
+        <div class="buttons">
+
+            <a href="#features"
+               class="btn btn-primary">
+                Explore Security
+            </a>
+
+            <a href="#about"
+               class="btn btn-outline">
+                Learn More
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="security-orb"></div>
+
+</section>
+
+
+<!-- =========================
+     FEATURES
+========================= -->
+
+<section class="features"
+         id="features">
+
+    <div class="section-title">
+
+        <h2>
+            Powerful Protection
+        </h2>
+
+        <p>
+            Built for modern Windows security
+        </p>
+
+    </div>
+
+
+    <div class="cards">
+
+        <div class="card">
+
+            <div class="icon">
+                🧠
+            </div>
+
+            <h3>
+                AI Detection
+            </h3>
+
+            <p>
+                Analyze suspicious behavior
+                using intelligent detection
+                techniques.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="icon">
+                🔍
+            </div>
+
+            <h3>
+                Malware Scan
+            </h3>
+
+            <p>
+                Identify potentially harmful
+                files and suspicious activity.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="icon">
+                🛡️
+            </div>
+
+            <h3>
+                Theft Protection
+            </h3>
+
+            <p>
+                Help protect important Windows
+                information from unauthorized
+                access.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="icon">
+                ⚡
+            </div>
+
+            <h3>
+                Real-Time Alerts
+            </h3>
+
+            <p>
+                Get quick visual notifications
+                when suspicious activity is
+                detected.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     ABOUT
+========================= -->
+
+<section class="cta"
+         id="about">
+
+    <h2>
+        Secure Your Digital World
+    </h2>
+
+    <p>
+        MAL-DECT combines modern security
+        concepts with an interactive interface
+        to provide a smarter Windows protection
+        experience.
+    </p>
+
+    <a href="#home"
+       class="btn btn-primary">
+        Back To Home
+    </a>
+
+</section>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer id="contact">
+
+    © 2026 MAL-DECT —
+    Windows Security Project
+
+</footer>
+
+
+<!-- =========================
+     JAVASCRIPT
+========================= -->
+
+<script>
+
+/* =========================
+   3D MOUSE EFFECT
+========================= */
+
+const cards =
+    document.querySelectorAll(".card");
+
+cards.forEach(card => {
+
+    card.addEventListener(
+        "mousemove",
+        (e) => {
+
+            const rect =
+                card.getBoundingClientRect();
+
+            const x =
+                e.clientX - rect.left;
+
+            const y =
+                e.clientY - rect.top;
+
+            const centerX =
+                rect.width / 2;
+
+            const centerY =
+                rect.height / 2;
+
+            const rotateX =
+                (y - centerY) / 12;
+
+            const rotateY =
+                (centerX - x) / 12;
+
+            card.style.transform =
+                `perspective(800px)
+                 rotateX(${rotateX}deg)
+                 rotateY(${rotateY}deg)
+                 translateY(-15px)
+                 scale(1.02)`;
+
+        }
+    );
+
+    card.addEventListener(
+        "mouseleave",
+        () => {
+
+            card.style.transform =
+                "";
+
+        }
+    );
+
+});
+
+
+/* =========================
+   BUTTON 3D MOUSE EFFECT
+========================= */
+
+const buttons =
+    document.querySelectorAll(".btn");
+
+buttons.forEach(button => {
+
+    button.addEventListener(
+        "mousemove",
+        e => {
+
+            const rect =
+                button.getBoundingClientRect();
+
+            const x =
+                e.clientX - rect.left;
+
+            const y =
+                e.clientY - rect.top;
+
+            const rotateY =
+                ((x / rect.width) - .5) * 15;
+
+            const rotateX =
+                ((y / rect.height) - .5) * -15;
+
+            button.style.transform =
+                `perspective(500px)
+                 rotateX(${rotateX}deg)
+                 rotateY(${rotateY}deg)
+                 translateY(-6px)`;
+
+        }
+    );
+
+    button.addEventListener(
+        "mouseleave",
+        () => {
+
+            button.style.transform = "";
+
+        }
+    );
+
+});
+
+
+/* =========================
+   PARALLAX HERO
+========================= */
+
+document.addEventListener(
+    "mousemove",
+    e => {
+
+        const orb =
+            document.querySelector(".security-orb");
+
+        const x =
+            (window.innerWidth / 2 - e.clientX) / 40;
+
+        const y =
+            (window.innerHeight / 2 - e.clientY) / 40;
+
+        orb.style.marginLeft = `${x}px`;
+
+        orb.style.marginTop = `${y}px`;
+
+    }
+);
+
+</script>
+
+</body>
+</html>
 </body>
 </html>
